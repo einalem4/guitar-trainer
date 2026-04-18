@@ -16,7 +16,7 @@ export const GUITAR_STRINGS: GuitarString[] = [
 
 export const FRET_COUNT = 12;
 
-export const DOT_FRETS: number[] = [3, 5, 7, 9, 12];
+export const DOT_FRETS: number[] = [3, 5, 7, 9];
 export const DOUBLE_DOT_FRET = 12;
 
 export function getNoteAtFret(openNote: NoteName, fret: number): NoteName {
