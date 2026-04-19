@@ -44,12 +44,12 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#faf8f4]">
       <header className="border-b border-stone-200 bg-white/80 backdrop-blur sticky top-0 z-40">
-        <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between flex-wrap gap-2">
+        <div className="max-w-4xl mx-auto px-4 py-2.5 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <span className="text-2xl">🎸</span>
             <h1 className="text-lg font-bold text-stone-900 tracking-tight">Guitar Trainer</h1>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <button
               onClick={() => setShowNotes((v) => !v)}
               className={`text-sm font-medium px-3 py-1.5 rounded-lg border transition-colors ${
@@ -65,7 +65,7 @@ export default function App() {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 py-6 flex flex-col gap-6">
+      <main className="max-w-4xl mx-auto px-4 py-6 flex flex-col gap-4">
         <div className="bg-white rounded-2xl border border-stone-200 p-4">
           <StringProgress
             activeIndices={progressState.activeIndices}
@@ -90,9 +90,10 @@ export default function App() {
           onNext={nextQuestion}
         />
 
-        <footer className="text-center text-xs text-stone-400 pb-4">
-          Standard tuning E A D G B e · Frets 1–12 + Open
-        </footer>
+        <p className="text-center text-xs text-stone-400 pb-4">
+          Tip: tap the string name on the left to play the open string.
+        </p>
+
       </main>
     </div>
   );

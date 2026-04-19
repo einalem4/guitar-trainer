@@ -17,7 +17,7 @@ export function NoteChoices({
     <div className="grid grid-cols-2 gap-3 w-full max-w-sm mx-auto">
       {choices.map((note) => {
         let style =
-          'bg-stone-100 text-stone-800 border-stone-300 hover:bg-amber-50 hover:border-amber-400 active:scale-95';
+          'bg-amber-50 text-stone-800 border-amber-200 hover:bg-amber-100 hover:border-amber-400 active:scale-95';
 
         if (answered) {
           if (note === correctNote) {

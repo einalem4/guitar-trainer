@@ -27,14 +27,14 @@ export function Quiz({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex gap-2 bg-stone-100 rounded-xl p-1 w-fit">
+      <div className="flex gap-2 bg-stone-100 rounded-xl p-1 w-full max-w-xs">
         {QUIZ_MODES.map(({ value, label }) => (
           <button
             key={value}
             onClick={() => onChangeMode(value)}
-            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+            className={`flex-1 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
               mode === value
-                ? 'bg-white text-stone-900 shadow-sm border border-stone-200'
+                ? 'bg-amber-500 text-white shadow-sm'
                 : 'text-stone-500 hover:text-stone-700'
             }`}
           >
@@ -46,21 +46,24 @@ export function Quiz({
       <div className="bg-stone-50 border border-stone-200 rounded-2xl p-5">
         {mode === 'find-note' ? (
           <div className="text-center">
-            <p className="text-stone-500 text-sm mb-2">Find this note on the fretboard</p>
-            <p className="text-5xl font-black text-stone-900 tracking-tight mb-3">
-              {target.note}
+            <p className="text-stone-800 font-semibold text-base sm:text-lg mb-1">
+              Find{' '}
+              <span className="text-amber-700 font-bold">{target.note}</span>{' '}
+              on the{' '}
+              <span className="text-amber-700 font-bold">{stringLabel} string</span>.
             </p>
-            <div className="inline-flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-lg px-3 py-1.5">
-              <span className="text-stone-500 text-sm">on the</span>
-              <span className="text-amber-800 font-bold text-sm">{stringLabel} string</span>
-            </div>
           </div>
         ) : (
           <div className="text-center">
-            <p className="text-stone-500 text-sm mb-1">What note is highlighted?</p>
-            <p className="text-stone-700 font-semibold">
-              {stringLabel} string — {target.fret === 0 ? 'open' : `fret ${target.fret}`}
+            <p className="text-stone-800 font-semibold text-base sm:text-lg mb-1">
+              What note is at{' '}
+              <span className="text-amber-700">
+                {target.fret === 0 ? 'open' : `fret ${target.fret}`}
+              </span>{' '}
+              on the{' '}
+              <span className="text-amber-700">{stringLabel} string</span>?
             </p>
+            <p className="text-stone-400 text-sm">Pick from the options below.</p>
           </div>
         )}
 

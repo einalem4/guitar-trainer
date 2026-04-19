@@ -10,7 +10,7 @@ export function StringProgress({ activeIndices, onToggleString }: StringProgress
   return (
     <div className="flex items-center gap-3 flex-wrap">
       <span className="text-sm text-stone-500 font-medium">Strings:</span>
-      <div className="flex gap-1.5 flex-wrap">
+      <div className="flex gap-2">
         {GUITAR_STRINGS.map(({ index, label }) => {
           const isActive = activeIndices.includes(index);
           const isOnlyActive = isActive && activeIndices.length === 1;
@@ -20,7 +20,7 @@ export function StringProgress({ activeIndices, onToggleString }: StringProgress
               key={index}
               onClick={() => onToggleString(index)}
               disabled={isOnlyActive}
-              className={`px-2 py-1 rounded text-xs font-bold border transition-colors select-none ${
+              className={`shrink-0 px-3 py-2 min-h-[44px] rounded text-xs sm:text-sm font-bold border transition-colors select-none ${
                 isActive
                   ? 'bg-amber-500 text-white border-amber-600 hover:bg-amber-600'
                   : 'bg-stone-100 text-stone-700 border-stone-300 hover:border-amber-400 hover:bg-stone-200'
