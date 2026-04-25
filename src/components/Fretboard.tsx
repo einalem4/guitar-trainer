@@ -28,7 +28,7 @@ function getFretCellStyle(
   const isTarget = target.stringIndex === stringIndex && target.fret === fret;
 
   let bg = 'bg-transparent';
-  let textColor = isActive ? 'text-amber-100' : 'text-stone-600';
+  let textColor = isActive ? 'text-amber-100' : 'text-stone-300';
   let ring = '';
 
   if (mode === 'name-note' && isTarget) {
@@ -61,7 +61,7 @@ export function Fretboard({
 }: FretboardProps) {
   return (
     <div className="w-full overflow-x-auto pb-2">
-      <div className="min-w-[580px]">
+      <div className="min-w-[460px] sm:min-w-[580px]">
         <div className="flex">
           <div className="w-16 shrink-0" />
           {FRETS.map((fret) => (
@@ -75,7 +75,7 @@ export function Fretboard({
         </div>
 
         <div className="rounded-lg overflow-hidden border border-stone-700 bg-stone-900">
-          {GUITAR_STRINGS.map(({ index, label }) => {
+          {[...GUITAR_STRINGS].reverse().map(({ index, label }) => {
             const isActive = activeStringIndices.includes(index);
             const openNote = FRETBOARD[index][0];
             const openCellStyle = getFretCellStyle(index, 0, openNote, quiz, activeStringIndices);
@@ -84,18 +84,26 @@ export function Fretboard({
             return (
               <div key={index} className="flex items-stretch border-b border-stone-700 last:border-b-0">
                 <div
-                  className={`w-16 shrink-0 flex flex-col items-center justify-center border-r-2 border-r-stone-500 py-1 select-none transition-all duration-100 ${openCellStyle}`}
-                  style={{ minHeight: '2.75rem' }}
+                  className={`group w-16 shrink-0 flex flex-col items-center justify-center border-r-2 border-r-stone-500 py-1 select-none transition-all duration-100 min-h-8 sm:min-h-11 ${
+                    isInteractive
+                      ? 'cursor-pointer hover:bg-amber-500/15 active:scale-95'
+                      : ''
+                  } ${openCellStyle}`}
                   onClick={() => isInteractive && onFretClick(index, 0)}
                   role={isInteractive ? 'button' : undefined}
                   aria-label={`${label} string, open, note ${openNote}`}
                 >
-                  <span className={`text-xs font-bold leading-tight ${isActive ? 'text-amber-300' : 'text-stone-600'}`}>
+                  <span className={`text-xs font-bold leading-tight ${isActive ? 'text-amber-300' : 'text-stone-500'}`}>
                     {label}
                   </span>
                   {(showNotes || !isActive || quiz.answered) && (
                     <span className="text-[10px] font-semibold leading-tight opacity-80">
                       ({openNote})
+                    </span>
+                  )}
+                  {isInteractive && (
+                    <span className="text-[9px] text-amber-400 opacity-0 group-hover:opacity-70 transition-opacity leading-none mt-0.5">
+                      tap
                     </span>
                   )}
                 </div>
@@ -109,15 +117,14 @@ export function Fretboard({
                   return (
                     <div
                       key={fret}
-                      className={`flex-1 relative flex items-center justify-center border-r border-stone-700 last:border-r-0 transition-all duration-100 select-none ${cellStyle}`}
-                      style={{ minHeight: '2.75rem' }}
+                      className={`flex-1 relative flex items-center justify-center border-r border-stone-700 last:border-r-0 transition-all duration-100 select-none min-h-8 sm:min-h-11 ${cellStyle}`}
                       onClick={() => isInteractive && onFretClick(index, fret)}
                       role={isInteractive ? 'button' : undefined}
                       aria-label={`${label} string, fret ${fret}, note ${note}`}
                     >
                       <div
                         className={`absolute top-1/2 -translate-y-1/2 left-0 right-0 w-full pointer-events-none ${
-                          isActive ? 'bg-amber-200/30' : 'bg-stone-700/30'
+                          isActive ? 'bg-amber-200/30' : 'bg-stone-500/50'
                         }`}
                         style={{ height: `${1 + (5 - Number(index)) * 0.4}px` }}
                       />
@@ -129,7 +136,7 @@ export function Fretboard({
                       {(showNotes || !isActive || quiz.answered) && (
                         <span
                           className={`relative z-20 text-center font-semibold leading-tight pointer-events-none ${
-                            isActive ? 'text-[10px]' : 'text-[9px] opacity-40'
+                            isActive ? 'text-[10px]' : 'text-[9px] opacity-90'
                           }`}
                         >
                           {note}
