@@ -3,6 +3,7 @@ import type { NoteName } from '../types';
 interface NoteChoicesProps {
   choices: NoteName[];
   correctNote: NoteName;
+  answeredNote?: NoteName;
   answered: boolean;
   onAnswer: (note: NoteName) => void;
 }
@@ -10,6 +11,7 @@ interface NoteChoicesProps {
 export function NoteChoices({
   choices,
   correctNote,
+  answeredNote,
   answered,
   onAnswer,
 }: NoteChoicesProps) {
@@ -22,6 +24,8 @@ export function NoteChoices({
         if (answered) {
           if (note === correctNote) {
             style = 'bg-green-100 text-green-800 border-green-500';
+          } else if (note === answeredNote) {
+            style = 'bg-red-100 text-red-700 border-red-400';
           } else {
             style = 'bg-stone-100 text-stone-400 border-stone-200 opacity-60';
           }

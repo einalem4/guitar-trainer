@@ -32,14 +32,26 @@ function getFretCellStyle(
   let ring = '';
 
   if (mode === 'name-note' && isTarget) {
-    bg = 'bg-amber-500';
+    if (answered) {
+      bg = 'bg-green-600';
+    } else {
+      bg = 'bg-amber-500';
+      ring = 'ring-2 ring-amber-300';
+    }
     textColor = 'text-white';
-    if (!answered) ring = 'ring-2 ring-amber-300';
   } else if (answered && mode === 'find-note') {
+    const isAnsweredAt =
+      !wasCorrect &&
+      quiz.answeredAt?.stringIndex === stringIndex &&
+      quiz.answeredAt?.fret === fret;
+
     if (isTarget) {
-      bg = wasCorrect ? 'bg-green-600' : 'bg-red-600';
+      bg = 'bg-green-600';
       textColor = 'text-white';
-    } else if (note === target.note && isActive) {
+    } else if (isAnsweredAt) {
+      bg = 'bg-red-600';
+      textColor = 'text-white';
+    } else if (wasCorrect && note === target.note && isActive && stringIndex === target.stringIndex) {
       bg = 'bg-green-800';
       textColor = 'text-white';
     }
@@ -133,13 +145,17 @@ export function Fretboard({
                         <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-stone-500 pointer-events-none z-10" />
                       )}
 
-                      {(showNotes || !isActive || quiz.answered) && (
+                      {(showNotes || !isActive || quiz.answered) ? (
                         <span
                           className={`relative z-20 text-center font-semibold leading-tight pointer-events-none ${
                             isActive ? 'text-[10px]' : 'text-[9px] opacity-90'
                           }`}
                         >
                           {note}
+                        </span>
+                      ) : (
+                        <span className="relative z-20 text-[9px] font-semibold text-amber-600/60 pointer-events-none select-none">
+                          ?
                         </span>
                       )}
                     </div>

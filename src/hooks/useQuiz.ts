@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import type { QuizMode, QuizState, StringIndex } from '../types';
+import type { NoteName, QuizMode, QuizState, StringIndex } from '../types';
 import {
   FRETBOARD,
   FRET_COUNT,
@@ -48,17 +48,17 @@ export function useQuiz(activeStringIndices: StringIndex[]) {
       const correct =
         clickedStringIndex === quiz.target.stringIndex &&
         clickedNote === quiz.target.note;
-      setQuiz((prev) => ({ ...prev, answered: true, wasCorrect: correct }));
+      setQuiz((prev) => ({ ...prev, answered: true, wasCorrect: correct, answeredAt: { stringIndex: clickedStringIndex, fret: clickedFret } }));
       return correct;
     },
     [quiz.answered, quiz.target.note, quiz.target.stringIndex]
   );
 
   const answerNameNote = useCallback(
-    (chosenNote: string): boolean => {
+    (chosenNote: NoteName): boolean => {
       if (quiz.answered) return false;
       const correct = chosenNote === quiz.target.note;
-      setQuiz((prev) => ({ ...prev, answered: true, wasCorrect: correct }));
+      setQuiz((prev) => ({ ...prev, answered: true, wasCorrect: correct, answeredNote: chosenNote }));
       return correct;
     },
     [quiz.answered, quiz.target.note]

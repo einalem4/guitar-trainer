@@ -5,7 +5,7 @@ import { Fretboard } from './components/Fretboard';
 import { Quiz } from './components/Quiz';
 import { ScoreDisplay } from './components/ScoreDisplay';
 import { StringProgress } from './components/StringProgress';
-import type { StringIndex } from './types';
+import type { NoteName, StringIndex } from './types';
 
 export default function App() {
   const [showNotes, setShowNotes] = useState(false);
@@ -35,7 +35,7 @@ export default function App() {
   );
 
   const handleNameNoteAnswer = useCallback(
-    (note: string) => {
+    (note: NoteName) => {
       recordAnswer(answerNameNote(note));
     },
     [answerNameNote, recordAnswer]

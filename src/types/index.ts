@@ -24,6 +24,8 @@ export interface QuizState {
   answered: boolean;
   wasCorrect: boolean | null;
   choices: NoteName[];
+  answeredAt?: { stringIndex: StringIndex; fret: number };
+  answeredNote?: NoteName;
 }
 
 export interface ScoreState {

@@ -28,10 +28,11 @@ export function ScoreDisplay({ score, onReset }: ScoreDisplayProps) {
       {attempts > 0 && (
         <button
           onClick={onReset}
-          className="ml-1 text-stone-400 hover:text-stone-600 transition-colors text-base leading-none"
+          className="ml-1.5 bg-transparent text-[#92400e] hover:bg-[#92400e] hover:text-white transition-colors duration-150 text-sm font-medium rounded-[6px]"
+          style={{ border: '1.5px solid #92400e', padding: '4px 12px' }}
           aria-label="Reset score"
         >
-          ×
+          Reset
         </button>
       )}
     </div>

@@ -1,4 +1,4 @@
-import type { QuizMode, QuizState } from '../types';
+import type { NoteName, QuizMode, QuizState } from '../types';
 import { GUITAR_STRINGS } from '../utils/noteUtils';
 import { NoteChoices } from './NoteChoices';
 
@@ -11,7 +11,7 @@ interface QuizProps {
   quiz: QuizState;
   mode: QuizMode;
   onChangeMode: (mode: QuizMode) => void;
-  onNameNoteAnswer: (note: string) => void;
+  onNameNoteAnswer: (note: NoteName) => void;
   onNext: () => void;
 }
 
@@ -84,6 +84,7 @@ export function Quiz({
             <NoteChoices
               choices={choices}
               correctNote={target.note}
+              answeredNote={quiz.answeredNote ?? undefined}
               answered={answered}
               onAnswer={onNameNoteAnswer}
             />
