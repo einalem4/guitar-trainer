@@ -5,9 +5,11 @@ import { Fretboard } from './components/Fretboard';
 import { Quiz } from './components/Quiz';
 import { ScoreDisplay } from './components/ScoreDisplay';
 import { StringProgress } from './components/StringProgress';
+import { WelcomeScreen } from './components/WelcomeScreen';
 import type { NoteName, StringIndex } from './types';
 
 export default function App() {
+  const [showWelcome, setShowWelcome] = useState(true);
   const [showNotes, setShowNotes] = useState(false);
 
   const {
@@ -40,6 +42,8 @@ export default function App() {
     },
     [answerNameNote, recordAnswer]
   );
+
+  if (showWelcome) return <WelcomeScreen onStart={() => setShowWelcome(false)} />;
 
   return (
     <div className="min-h-screen bg-[#faf8f4]">
