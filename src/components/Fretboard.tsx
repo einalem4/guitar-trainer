@@ -12,6 +12,7 @@ interface FretboardProps {
   quiz: QuizState;
   activeStringIndices: StringIndex[];
   showNotes: boolean;
+  peekActive: boolean;
   onFretClick: (stringIndex: StringIndex, fret: number) => void;
 }
 
@@ -71,6 +72,7 @@ export function Fretboard({
   quiz,
   activeStringIndices,
   showNotes,
+  peekActive,
   onFretClick,
 }: FretboardProps) {
   const [fretWindowStart, setFretWindowStart] = useState(1);
@@ -99,8 +101,6 @@ export function Fretboard({
   const nameNoteCenter = quiz.target.fret === 0 ? 2 : Math.min(Math.max(quiz.target.fret, 2), FRET_COUNT - 1);
   const nameNoteFrets = [nameNoteCenter - 1, nameNoteCenter, nameNoteCenter + 1];
 
-  // Low E (index 0) and High e (index 5) share identical notes — hide both when either is active
-  const eStringActive = activeStringIndices.includes(0 as StringIndex) || activeStringIndices.includes(5 as StringIndex);
 
   return (
     <>
@@ -120,9 +120,7 @@ export function Fretboard({
 
             <div className="rounded-lg overflow-hidden border border-stone-700 bg-stone-900">
               {reversedStrings.map(({ index, label }) => {
-                const isActive = activeStringIndices.includes(index);
-                const hideAsActive = isActive || ((index === 0 || index === 5) && eStringActive);
-                const openNote = FRETBOARD[index][0];
+                const isActive = activeStringIndices.includes(index);                const openNote = FRETBOARD[index][0];
                 const openCellStyle = getFretCellStyle(index, 0, openNote, quiz, activeStringIndices);
 
                 return (
@@ -134,7 +132,7 @@ export function Fretboard({
                       <span className={`text-xs font-bold leading-tight ${isActive ? 'text-amber-300' : 'text-stone-500'}`}>
                         {label}
                       </span>
-                      {(showNotes || !hideAsActive || quiz.answered) && (
+                      {(showNotes || (peekActive && !isActive) || quiz.answered) && (
                         <span className="text-[10px] font-semibold leading-tight opacity-80">({openNote})</span>
                       )}
                     </div>
@@ -160,7 +158,7 @@ export function Fretboard({
                           {(isDot || isDoubleDot) && (
                             <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-stone-500 pointer-events-none z-10" />
                           )}
-                          {(showNotes || !hideAsActive || quiz.answered) ? (
+                          {(showNotes || (peekActive && !isActive) || quiz.answered) ? (
                             <span className={`relative z-20 text-center font-semibold leading-tight pointer-events-none ${isActive ? 'text-[10px]' : 'text-[9px] opacity-90'}`}>
                               {note}
                             </span>
@@ -243,7 +241,6 @@ export function Fretboard({
               <div className="rounded-lg overflow-hidden border border-stone-700 bg-stone-900">
                 {reversedStrings.map(({ index, label }) => {
                   const isActive = activeStringIndices.includes(index);
-                  const hideAsActive = isActive || ((index === 0 || index === 5) && eStringActive);
                   const openNote = FRETBOARD[index][0];
                   const openCellStyle = getFretCellStyle(index, 0, openNote, quiz, activeStringIndices);
                   const isInteractive = isActive && !quiz.answered;
@@ -261,7 +258,7 @@ export function Fretboard({
                         <span className={`text-xs font-bold leading-tight ${isActive ? 'text-amber-300' : 'text-stone-500'}`}>
                           {label}
                         </span>
-                        {(showNotes || !hideAsActive || quiz.answered) && (
+                        {(showNotes || (peekActive && !isActive) || quiz.answered) && (
                           <span className="text-[10px] font-semibold leading-tight opacity-80">({openNote})</span>
                         )}
                         {isInteractive && (
@@ -292,7 +289,7 @@ export function Fretboard({
                             {(isDot || isDoubleDot) && (
                               <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-stone-500 pointer-events-none z-10" />
                             )}
-                            {(showNotes || !hideAsActive || quiz.answered) ? (
+                            {(showNotes || (peekActive && !isActive) || quiz.answered) ? (
                               <span className={`relative z-20 text-center font-semibold leading-tight pointer-events-none ${isActive ? 'text-[10px]' : 'text-[9px] opacity-90'}`}>
                                 {note}
                               </span>
@@ -351,7 +348,6 @@ export function Fretboard({
           <div className="rounded-lg overflow-hidden border border-stone-700 bg-stone-900">
             {reversedStrings.map(({ index, label }) => {
               const isActive = activeStringIndices.includes(index);
-              const hideAsActive = isActive || ((index === 0 || index === 5) && eStringActive);
               const openNote = FRETBOARD[index][0];
               const openCellStyle = getFretCellStyle(index, 0, openNote, quiz, activeStringIndices);
               const isInteractive = isActive && quiz.mode === 'find-note' && !quiz.answered;
@@ -369,7 +365,7 @@ export function Fretboard({
                     <span className={`text-xs font-bold leading-tight ${isActive ? 'text-amber-300' : 'text-stone-500'}`}>
                       {label}
                     </span>
-                    {(showNotes || !hideAsActive || quiz.answered) && (
+                    {(showNotes || (peekActive && !isActive) || quiz.answered) && (
                       <span className="text-[10px] font-semibold leading-tight opacity-80">({openNote})</span>
                     )}
                     {isInteractive && (
@@ -400,7 +396,7 @@ export function Fretboard({
                         {(isDot || isDoubleDot) && (
                           <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-stone-500 pointer-events-none z-10" />
                         )}
-                        {(showNotes || !hideAsActive || quiz.answered) ? (
+                        {(showNotes || (peekActive && !isActive) || quiz.answered) ? (
                           <span className={`relative z-20 text-center font-semibold leading-tight pointer-events-none ${isActive ? 'text-[10px]' : 'text-[9px] opacity-90'}`}>
                             {note}
                           </span>

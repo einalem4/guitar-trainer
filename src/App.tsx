@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useProgress } from './hooks/useProgress';
 import { useQuiz } from './hooks/useQuiz';
 import { Fretboard } from './components/Fretboard';
@@ -11,6 +11,9 @@ import type { NoteName, StringIndex } from './types';
 export default function App() {
   const [showWelcome, setShowWelcome] = useState(true);
   const [showNotes, setShowNotes] = useState(false);
+  const [peekActive, setPeekActive] = useState(false);
+  const [peekSecondsLeft, setPeekSecondsLeft] = useState(5);
+  const peekTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const {
     state: progressState,
@@ -28,6 +31,35 @@ export default function App() {
     answerFindNote,
     answerNameNote,
   } = useQuiz(activeStringIndices);
+
+  const cancelPeek = useCallback(() => {
+    if (peekTimerRef.current) clearInterval(peekTimerRef.current);
+    peekTimerRef.current = null;
+    setPeekActive(false);
+    setPeekSecondsLeft(5);
+  }, []);
+
+  const handlePeek = useCallback(() => {
+    if (peekActive) return;
+    setPeekActive(true);
+    setPeekSecondsLeft(5);
+    let remaining = 5;
+    peekTimerRef.current = setInterval(() => {
+      remaining--;
+      setPeekSecondsLeft(remaining);
+      if (remaining <= 0) {
+        clearInterval(peekTimerRef.current!);
+        peekTimerRef.current = null;
+        setPeekActive(false);
+        setPeekSecondsLeft(5);
+      }
+    }, 1000);
+  }, [peekActive]);
+
+  const handleNext = useCallback(() => {
+    cancelPeek();
+    nextQuestion();
+  }, [cancelPeek, nextQuestion]);
 
   const handleFretClick = useCallback(
     (stringIndex: StringIndex, fret: number) => {
@@ -64,6 +96,17 @@ export default function App() {
             >
               {showNotes ? 'Hide notes' : 'Show notes'}
             </button>
+            <button
+              onClick={handlePeek}
+              disabled={peekActive}
+              className={`text-sm font-medium px-3 py-1.5 rounded-lg border transition-colors ${
+                peekActive
+                  ? 'bg-stone-700 text-amber-200 border-stone-600 cursor-default tabular-nums'
+                  : 'bg-stone-800 text-amber-100 border-stone-700 hover:bg-stone-700'
+              }`}
+            >
+              👁 {peekActive ? peekSecondsLeft : 'Peek'}
+            </button>
             <ScoreDisplay score={progressState.score} onReset={resetScore} />
           </div>
         </div>
@@ -82,6 +125,7 @@ export default function App() {
             quiz={quiz}
             activeStringIndices={activeStringIndices}
             showNotes={showNotes}
+            peekActive={peekActive}
             onFretClick={handleFretClick}
           />
         </div>
@@ -91,7 +135,7 @@ export default function App() {
           mode={mode}
           onChangeMode={changeMode}
           onNameNoteAnswer={handleNameNoteAnswer}
-          onNext={nextQuestion}
+          onNext={handleNext}
         />
 
         <p className="text-center text-xs text-stone-400 pb-4">
